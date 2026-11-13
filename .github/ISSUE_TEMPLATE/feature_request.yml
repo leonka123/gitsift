@@ -1,0 +1,61 @@
+name: Feature request
+description: A change that would make the radar more useful.
+title: "[feat] "
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        GitSift is deliberately small. The best requests fix a measurable failure mode in ranking,
+        search or reading — not a longer feature list.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: The problem
+      description: What is hard or impossible today? Be concrete.
+      placeholder: "When I search for …, the top results are … because …"
+    validations:
+      required: true
+
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Proposed change
+      description: What should happen instead? A rough sketch is enough.
+    validations:
+      required: true
+
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Search and ranking
+        - Scoring and quality filters
+        - Ingestion sources
+        - Digest and editorial
+        - UI and accessibility
+        - API and tooling
+        - Documentation
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives considered
+      description: Existing workarounds, other tools, or why a smaller change is not enough.
+    validations:
+      required: false
+
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Before submitting
+      options:
+        - label: I searched existing issues and this is not a duplicate.
+          required: true
+        - label: This request does not involve paid placement, bought stars or fake metrics.
+          required: true

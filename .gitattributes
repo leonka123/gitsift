@@ -1,0 +1,7 @@
+# Normalize line endings in the repository and keep LF in the working tree so
+# shell scripts and Dockerfiles behave the same on Windows, macOS and Linux.
+* text=auto eol=lf
+
+*.bat text eol=crlf
+*.cmd text eol=crlf
+*.ps1 text eol=crlf

@@ -1,0 +1,75 @@
+name: Bug report
+description: Something is broken, wrong or misleading.
+title: "[bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for the report. Please do not paste API keys, `.env` contents or database files.
+
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened
+      description: The actual behaviour, including the URL or query if it is a data problem.
+      placeholder: "Searching for … returns … instead of …"
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: What you expected
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. npm run db:reset
+        2. Open /search?q=...
+        3. ...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: setup
+    attributes:
+      label: Setup
+      options:
+        - Seed database (npm run db:reset)
+        - Live ingest (npm run ingest)
+        - Production build (npm run build && npm start)
+        - Docker
+        - Hosted demo
+        - Other
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Version or commit
+      placeholder: "v0.1.0 / commit sha"
+    validations:
+      required: false
+
+  - type: input
+    id: node
+    attributes:
+      label: Node version
+      placeholder: "v22.16.0"
+    validations:
+      required: false
+
+  - type: textarea
+    id: logs
+    attributes:
+      label: Relevant logs
+      description: Server output, browser console errors or a screenshot. Redact secrets.
+      render: shell
+    validations:
+      required: false

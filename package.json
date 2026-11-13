@@ -1,0 +1,59 @@
+{
+  "name": "gitsift",
+  "version": "0.1.0",
+  "private": false,
+  "license": "MIT",
+  "type": "module",
+  "description": "An open-source radar for new and rising GitHub repositories.",
+  "homepage": "https://gitsift.dev",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/gitsift/gitsift"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "node .next/standalone/server.js",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "db:migrate": "tsx scripts/migrate.ts",
+    "db:seed": "tsx scripts/seed.ts",
+    "db:reset": "tsx scripts/seed.ts --reset",
+    "ingest": "tsx scripts/ingest.ts",
+    "score": "tsx scripts/score.ts",
+    "summarize": "tsx scripts/summarize.ts",
+    "embed": "tsx scripts/embed.ts",
+    "digest": "tsx scripts/digest.ts",
+    "pipeline": "npm run ingest && npm run score && npm run summarize && npm run embed && npm run digest",
+    "fetch:seed": "node scripts/fetch-seed.mjs",
+    "postbuild": "node scripts/copy-static.mjs"
+  },
+  "dependencies": {
+    "@fontsource-variable/fraunces": "5.3.0",
+    "@fontsource-variable/inter": "5.3.0",
+    "@fontsource-variable/jetbrains-mono": "5.3.0",
+    "better-sqlite3": "13.1.1",
+    "clsx": "2.1.1",
+    "lucide-react": "1.72.0",
+    "next": "15.5.29",
+    "react": "19.3.1",
+    "react-dom": "19.3.1",
+    "tailwind-merge": "3.7.0",
+    "zod": "4.6.7"
+  },
+  "devDependencies": {
+    "@tailwindcss/postcss": "4.3.5",
+    "@types/better-sqlite3": "9.6.0",
+    "@types/node": "22.20.5",
+    "@types/react": "19.3.0",
+    "@types/react-dom": "19.3.0",
+    "playwright-core": "^1.65.0",
+    "tailwindcss": "4.3.5",
+    "tsx": "4.23.15",
+    "typescript": "5.9.3",
+    "vitest": "5.1.0"
+  }
+}

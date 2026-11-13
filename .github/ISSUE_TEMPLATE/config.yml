@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Question or idea
+    url: https://github.com/gitsift/gitsift/discussions
+    about: Ask a question, share a query that ranks badly, or discuss a direction.
+  - name: Security report
+    url: https://github.com/gitsift/gitsift/security/advisories/new
+    about: Please report vulnerabilities privately, not in a public issue.
