@@ -3,60 +3,89 @@
 **Find the repo before it is obvious.**
 
 GitSift is an open-source radar for new and rising GitHub repositories. It reads the public
-firehose, filters the noise, and ranks what is actually moving — with a reason to look now.
+firehose, drops the forks, list repos and bought stars, ranks what is actually moving — and tells
+you, in one paragraph, why it deserves ten minutes of your Saturday.
 
-[Русская версия](README.ru.md) · [Method](src/app/about/page.tsx) · [Architecture](docs/ARCHITECTURE.md) · [RSS route](src/app/rss.xml/route.ts)
+It runs on one Node process and a local SQLite file. No API keys, no external services, no
+telemetry.
 
-![GitSift home page](docs/gitsift-home.jpg)
+[![CI](https://img.shields.io/github/actions/workflow/status/leonka123/gitsift/ci.yml?branch=main&style=flat-square&label=CI)](https://github.com/leonka123/gitsift/actions/workflows/ci.yml)
+[![MIT](https://img.shields.io/github/license/leonka123/gitsift?style=flat-square&color=2b1f18)](LICENSE)
+[![Node 22+](https://img.shields.io/badge/node-22%2B-2b1f18?style=flat-square)](package.json)
+[![No API keys](https://img.shields.io/badge/api%20keys-none-c03217?style=flat-square)](#quick-start)
+[![PRs welcome](https://img.shields.io/badge/PRs-welcome-c03217?style=flat-square)](CONTRIBUTING.md)
 
----
+![GitSift home page — an editorial radar with a signal-ranked ledger](docs/home-light.png)
 
-## Why another GitHub trending?
+## The problem with star leaderboards
 
-GitHub Trending is a black box sorted by raw stars. Star count rewards the past: a five-year-old
-project with 80k stars can outrank a three-week-old tool that is adding 200 stars a day.
+GitHub Trending sorts by raw stars, which rewards the past. A five-year-old project with 80k stars
+outranks a three-week-old tool adding 200 stars a day — and neither tells you whether the code is
+real, maintained, or useful to what you are building.
 
-GitSift ranks the present:
+GitSift ranks momentum, not magnitude:
 
-- **Momentum, not magnitude.** Stars per day since creation, adjusted for age and scale.
-- **Quality gates.** Forks, archives, empty READMEs, list repos and star spikes are penalised.
-- **Plain-language reasons.** Every entry gets a summary, a factual "why now", and a weekend-sized
-  build idea.
-- **Search by intent.** Describe what you are building, in English or Russian, and get repositories
-  that fit — not keyword matches.
+| | GitHub Trending | GitSift |
+| --- | --- | --- |
+| Ranking input | total stars | stars/day, age, activity, quality prior |
+| Star spikes | invisible | penalised by a bot score |
+| Dead or archived projects | mixed in | filtered before scoring |
+| "Why should I care?" | nothing | a factual reason and a weekend-sized build idea |
+| Search | keywords | hybrid lexical + semantic, English and Russian |
+| Code | closed | MIT, self-hostable, auditable |
 
-The full ranking formula is on the [method page](src/app/about/page.tsx) and in
-[`src/lib/scoring.ts`](src/lib/scoring.ts). No paid placement. No bought stars.
+The full formula is public, unit-tested and documented on the [method page](src/app/about/page.tsx)
+and in [`src/lib/scoring.ts`](src/lib/scoring.ts).
 
 ## What is inside
 
-| Surface | What it does |
-| --- | --- |
-| **Rising** | The live signal-ranked ledger. Every repo carries a percentile score. |
-| **New** | Projects created in the last 7, 30 or 90 days, ranked without star history to lean on. |
-| **Hidden gems** | 20–900 stars, at least 1.5 stars/day, still small enough to matter. |
-| **Semantic search** | Hybrid FTS5 + embeddings + reciprocal rank fusion, with English/Russian concept expansion. |
-| **Weekly issue** | A 12-entry edit with "why now" and "weekend build" notes, published as RSS. |
-| **Public API** | The same data the UI uses, without authentication. |
+- **Rising** — the live ledger, one row per repository, each with a percentile score on a
+  five-step signal scale.
+- **New** — repositories created in the last 7 / 30 / 90 days, ranked without long star history to
+  lean on.
+- **Hidden gems** — 20–900 stars, at least 1.5 stars/day, still small enough that the maintainer
+  answers issues.
+- **Semantic search** — describe the job, not the keyword. FTS5 + embeddings + reciprocal rank
+  fusion, with English/Russian concept expansion.
+- **Weekly issue** — twelve entries with "why now" and "weekend build" notes, published as RSS.
+- **Public API** — the same data the pages use, no auth, cache-friendly.
+
+<table>
+  <tr>
+    <td width="50%"><img src="docs/search-light.png" alt="Semantic search results for a self-hosted analytics tool" /></td>
+    <td width="50%"><img src="docs/repo-light.png" alt="Repository page with signal percentile, star trajectory and similar repos" /></td>
+  </tr>
+  <tr>
+    <td><em>Search by intent: “self-hosted analytics” → plausible/analytics, ClickHouse, langfuse.</em></td>
+    <td><em>Every repository page shows the score, the trajectory and the neighbours.</em></td>
+  </tr>
+</table>
+
+<details>
+<summary><strong>Dark theme</strong></summary>
+
+![GitSift home page in dark theme](docs/home-dark.png)
+
+</details>
 
 ## Quick start
 
-Requirements: **Node.js 22+**. No database server, no Docker, no API keys.
+Requires **Node.js 22+**. Nothing else.
 
 ```bash
-git clone https://github.com/gitsift/gitsift.git
+git clone https://github.com/leonka123/gitsift.git
 cd gitsift
 npm install
-npm run db:reset
 npm run dev
 ```
 
-Open <http://localhost:3000>. The reset command loads the bundled 1,240-repo seed slice, scores it,
-writes summaries and embeddings, and builds the current weekly issue. It takes under a minute on a
-laptop.
+Open <http://localhost:3000>. On the first run GitSift loads the bundled **1,240-repository seed** —
+real public metadata — scores it, writes summaries and embeddings, and builds the current issue.
+That takes under a minute; the database is cached in `data/gitsift.db` afterwards.
 
-> The seed is a real snapshot of public GitHub metadata, included so the demo works offline. It is
-> not a live mirror. Run the ingestion pipeline to refresh it.
+![Mobile layout](docs/mobile-light.png)
+
+> The seed is a snapshot, not a live mirror. Run `npm run ingest` to refresh from GitHub.
 
 ### Docker
 
@@ -65,7 +94,49 @@ docker build -t gitsift .
 docker run --rm -p 3000:3000 -v gitsift-data:/app/data gitsift
 ```
 
-The image ships with a seeded database on first boot; the named volume keeps later ingests.
+The image seeds itself on first boot; the named volume keeps later ingests.
+
+## How the ranking works
+
+The raw score is a weighted sum of five signals, then converted to a percentile across the whole
+index:
+
+```text
+raw = 0.50 · momentum      // log1p(stars_per_day · 7)
+    + 0.16 · scale         // log10(stars + 1)
+    + 0.14 · freshness     // 1 - age_days / 1100
+    + 0.10 · activity      // 1 - days_since_push / 120
+    + 0.24 · quality       // heuristic prior, 0..1
+
+signal = percentile(raw × (0.55 + 0.45 · trust))   // 0..100
+trust  = 1 - bot_score
+```
+
+A score of 99 means 99% of tracked repositories scored lower on the same day. The quality prior
+looks at README length, license, tests, CI, release history and issue response; the bot score
+penalises star spikes that do not match fork or contributor growth.
+
+## Search
+
+Two independent retrievals, fused with reciprocal rank fusion:
+
+1. **Lexical** — SQLite FTS5 BM25 over names, descriptions, topics and README excerpts.
+2. **Semantic** — cosine similarity over 384-dimensional embeddings.
+
+Query terms are expanded with a small English/Russian concept dictionary before retrieval
+(`src/lib/topics.ts`). With an LLM key configured, the top candidates are reranked and each result
+gets a specific reason.
+
+```bash
+# English
+curl "http://localhost:3000/api/search?q=self-hosted%20analytics&limit=5"
+
+# Russian
+curl "http://localhost:3000/api/search?q=инструмент%20для%20парсинга%20сайтов&limit=5"
+```
+
+The default embedding model is a zero-dependency lexical hash (`hash-384-v1`). It is fast, free and
+offline; it will not understand a metaphor. Set `EMBEDDINGS_PROVIDER=openai` if that matters to you.
 
 ## Refresh from GitHub
 
@@ -79,156 +150,99 @@ npm run ingest
 snapshots, recomputes signal, refreshes summaries and embeddings, and rebuilds the weekly issue.
 Without a token it still works, just slowly.
 
-### Schedule it
-
-`POST /api/cron/ingest` is protected by `CRON_SECRET`:
+Schedule it with the included GitHub Actions workflow (`.github/workflows/ingest.yml`), a cron job,
+or any scheduler:
 
 ```bash
-curl -X POST https://gitsift.dev/api/cron/ingest \
+curl -X POST https://your-deployment.example/api/cron/ingest \
   -H "Authorization: Bearer $CRON_SECRET"
 ```
 
-The included GitHub Actions workflow (`.github/workflows/ingest.yml`) calls it daily. Any scheduler
-works: Fly Machines, Vercel Cron, a systemd timer, or a cron job on the same box.
+## Deploy
 
-## Environment
+SQLite needs a persistent disk, so GitSift is not a good fit for stateless serverless platforms
+without an external database. The included paths:
 
-Copy `.env.example` to `.env`. Everything is optional for local development.
+- **Docker** on any host with a volume (works on Fly.io, Railway, Render, a VPS).
+- **Fly.io** with a volume — see [`fly.toml`](fly.toml) and [`docs/DEPLOY.md`](docs/DEPLOY.md).
+- **A small VPS** with `npm run build && npm start` behind Caddy or nginx.
 
-| Variable | Default | Purpose |
-| --- | --- | --- |
-| `DATABASE_PATH` | `./data/gitsift.db` | SQLite file. WAL mode is enabled automatically. |
-| `NEXT_PUBLIC_SITE_URL` | `http://localhost:3000` | Canonical URL for sitemap, RSS and OG images. |
-| `GITHUB_TOKEN` | — | Lifts the GitHub REST limit to 5,000 requests/hour. |
-| `LLM_API_KEY` | — | Any OpenAI-compatible key. Enables LLM summaries, search reranking and digest intros. |
-| `LLM_BASE_URL` | `https://openrouter.ai/api/v1` | OpenRouter, OpenAI, Groq, DeepSeek, Ollama, LM Studio… |
-| `LLM_MODEL` | `google/gemini-2.5-flash` | Model name for the provider above. |
-| `EMBEDDINGS_PROVIDER` | `hash` | `hash` is zero-dependency and offline; `openai` is better. |
-| `OPENAI_API_KEY` | — | Required only for `EMBEDDINGS_PROVIDER=openai`. |
-| `CRON_SECRET` | — | Bearer token for `POST /api/cron/ingest`. |
-
-GitSift is designed to degrade gracefully:
-
-- Without `GITHUB_TOKEN`, ingestion is rate-limited but functional.
-- Without an LLM key, summaries use a deterministic heuristic writer.
-- Without OpenAI, embeddings use a local 384-dimensional lexical hashing model. Search stays fast
-  and works offline; it will not understand a metaphor.
-
-## Commands
-
-| Command | What it does |
-| --- | --- |
-| `npm run dev` | Start the Next.js dev server. |
-| `npm run build` | Production build. |
-| `npm start` | Run the production server. |
-| `npm run db:reset` | Wipe and rebuild the seeded database. |
-| `npm run ingest` | Refresh repositories from GitHub. |
-| `npm run score` | Recompute signal percentiles. |
-| `npm run summarize` | Fill missing summaries. |
-| `npm run embed` | Fill missing embeddings. |
-| `npm run digest` | Rebuild the current weekly issue. |
-| `npm run pipeline` | Run ingest → score → summarize → embed → digest. |
-| `npm run typecheck` | TypeScript check. |
-| `npm test` | Unit tests (scoring, topics, embeddings, utils). |
-| `node scripts/screenshots.mjs` | Visual QA with local Chrome/Edge. |
+Set `NEXT_PUBLIC_SITE_URL` to the public origin (used for canonicals, sitemap, RSS and OG images)
+and `CRON_SECRET` to a long random value before exposing the app.
 
 ## API
 
 No auth, no keys, cache-friendly.
 
 ```bash
-# The rising ledger, 12 rows
-curl "https://gitsift.dev/api/repos?mode=rising&limit=12"
-
-# New Python repos from the last 30 days
-curl "https://gitsift.dev/api/repos?mode=new&windowDays=30&language=Python&limit=12"
-
-# Natural-language search
-curl "https://gitsift.dev/api/search?q=self-hosted+analytics&limit=10"
+GET /api/repos?mode=rising&limit=12
+GET /api/repos?mode=new&windowDays=30&language=Python&limit=12
+GET /api/repos?mode=gems&minStars=50&topic=mcp
+GET /api/search?q=self-hosted+analytics&limit=10&selfHosted=1
 ```
 
-Responses include the score, stars/day, topics, summary and GitHub URL. The README body is omitted;
-the character count is included so clients can decide whether to fetch it.
+`mode` is `rising | new | gems | top`. Responses include the score, stars/day, topics, summary and
+GitHub URL. The README body is omitted; its character count is included so clients can decide
+whether to fetch it.
 
-## How it works
+## Commands
 
-```
-GitHub Search API ──► ingest ──► SQLite (WAL + FTS5)
-                                     │
-                          ┌──────────┴──────────┐
-                          │                     │
-                       scoring              embeddings
-                          │                     │
-                          └──────────┬──────────┘
-                                     │
-                          feed · search · digest · RSS
-```
-
-The signal score is a percentile inside the current index:
-
-```text
-raw = 0.50 · momentum      // log1p(stars_per_day · 7)
-    + 0.16 · scale         // log10(stars + 1)
-    + 0.14 · freshness     // 1 - age_days / 1100
-    + 0.10 · activity      // 1 - days_since_push / 120
-    + 0.24 · quality       // heuristic prior, 0..1
-
-signal = percentile(raw × (0.55 + 0.45 · trust))   // 0..100
-trust  = 1 - bot_score
-```
-
-Percentiles are computed across every repository that passes ingestion, not only the ones shown in
-a feed. A score of 99 means 99% of tracked repositories scored lower on the same day.
-
-Search fuses two independent retrievals with reciprocal rank fusion:
-
-1. **Lexical** — SQLite FTS5 BM25 over names, descriptions, topics and README excerpts.
-2. **Semantic** — cosine similarity over 384-dimensional embeddings.
-
-Query terms are expanded with a small English/Russian concept dictionary before retrieval. When an
-LLM key is configured, the top candidates are reranked and each result gets a specific reason.
-
-Read [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md) for the schema, pipelines and deployment notes.
-
-## Deploy
-
-SQLite needs a persistent disk, so GitSift is not a good fit for a stateless serverless platform
-without an external database. The included paths are:
-
-- **Docker** on any host with a volume.
-- **Fly.io** with a persistent volume (`fly.toml`).
-- A small VPS with `npm run build && npm start` behind Caddy or nginx.
-
-Set `NEXT_PUBLIC_SITE_URL` to the public origin and `CRON_SECRET` to a long random value before
-exposing the app. The cron endpoint is the only mutating route.
-
-See [docs/DEPLOY.md](docs/DEPLOY.md) for a step-by-step Fly.io runbook.
+| Command | What it does |
+| --- | --- |
+| `npm run dev` | Seed on first run, then start the dev server. |
+| `npm run build` / `npm start` | Production build and server. |
+| `npm run db:reset` | Wipe and rebuild the seeded database. |
+| `npm run ingest` | Refresh repositories from GitHub. |
+| `npm run pipeline` | ingest → score → summarize → embed → digest. |
+| `npm run score` / `summarize` / `embed` / `digest` | Individual pipeline steps. |
+| `npm run typecheck` / `npm test` | TypeScript and unit tests. |
+| `node scripts/screenshots.mjs` | Visual QA with local Chrome or Edge. |
 
 ## Project structure
 
-```
+```text
 src/
   app/                 routes, metadata, OG images, RSS, API
-  components/          editorial UI primitives and repo rows
+  components/          editorial UI primitives, repo rows, signal meter
   db/                  schema, migrations, typed queries
   lib/                 ingest, scoring, embeddings, search, LLM, digest
-  types.ts             shared domain types
 scripts/               seed, ingest, pipeline steps, visual QA
-data/seed/repos.json   bundled 1,240-repo snapshot
+data/seed/repos.json   bundled 1,240-repository snapshot
 docs/                  architecture, deployment, design direction
 ```
+
+Read [`docs/ARCHITECTURE.md`](docs/ARCHITECTURE.md) for the schema and pipeline details.
+
+## Limitations
+
+Honest list, because a ranking you cannot question is just another black box:
+
+- Stars are a proxy for attention, and attention can be bought. The bot score catches clumsy
+  spikes, not sophisticated campaigns.
+- The index is young. Rankings improve as daily snapshots accumulate.
+- Discovery queries impose thresholds (stars, recency, topics). Quiet projects below them stay
+  invisible until they move.
+- The default embedding is lexical, not neural.
+
+## Roadmap
+
+Shipped and planned work lives in [`docs/ROADMAP.md`](docs/ROADMAP.md). The short version: a hosted
+demo, more snapshot history, saved searches, and broader topic coverage. Non-goals are listed too —
+no paid placement, no bought stars, no login wall.
 
 ## Contributing
 
 Issues and pull requests are welcome. Good first contributions:
 
 - Add a topic alias or a Russian/English search expansion.
-- Improve the anti-spam and bot heuristics with a failing example.
+- Improve the anti-spam heuristic with a real failing example.
 - Add a source query for an under-covered corner of the ecosystem.
 - Improve accessibility or performance on a page you use.
 
-Please read [CONTRIBUTING.md](CONTRIBUTING.md) before opening a large PR. By participating you agree
-to the [Code of Conduct](CODE_OF_CONDUCT.md).
+Read [CONTRIBUTING.md](CONTRIBUTING.md) first. By participating you agree to the
+[Code of Conduct](CODE_OF_CONDUCT.md).
+
+If GitSift saves you an afternoon, **star the repo** — that is how the next person finds it.
 
 ## License
 

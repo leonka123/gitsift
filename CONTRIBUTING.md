@@ -18,9 +18,11 @@ better.
 
 ```bash
 npm install
-npm run db:reset
 npm run dev
 ```
+
+`npm run dev` seeds the bundled 1,240-repository slice on first run and is a no-op afterwards. Use
+`npm run db:reset` when you want a clean database.
 
 Before opening a PR:
 
@@ -44,7 +46,7 @@ The script uses a locally installed Chrome or Edge; it does not download a brows
 ### Search quality
 
 A good search PR includes a failing query, the expected result, and the reason the current ranking
-misses it. Add a test in `src/lib/search.test.ts` or `src/lib/topics.test.ts` where possible.
+misses it. Add a test in `src/lib/topics.test.ts` or `src/lib/embeddings.test.ts` where possible.
 
 Useful areas:
 
