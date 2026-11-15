@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { ButtonLink } from "./ui";
-import { REPO_URL } from "@/lib/site";
+import { REPO_URL, DISCUSSIONS_URL } from "@/lib/site";
 
 const COLUMNS = [
   {
@@ -26,6 +26,7 @@ const COLUMNS = [
     title: "Project",
     links: [
       { href: REPO_URL, label: "GitHub", external: true },
+      { href: DISCUSSIONS_URL, label: "Discussions", external: true },
       { href: `${REPO_URL}/blob/main/CONTRIBUTING.md`, label: "Contributing", external: true },
       { href: `${REPO_URL}/blob/main/LICENSE`, label: "MIT license", external: true },
     ],

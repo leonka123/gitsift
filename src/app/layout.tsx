@@ -45,13 +45,10 @@ export const metadata: Metadata = {
       },
     ],
   },
-  twitter: {
-    card: "summary_large_image",
-    title: "GitSift — the radar for new and rising GitHub repositories",
-    description:
-      "New and rising open-source repositories, ranked by momentum and quality. Not another star leaderboard.",
-    images: ["/api/og"],
-  },
+  // Only the card type lives here. Title, description and image come from each
+  // page's `openGraph` block, so a shared repository link previews the
+  // repository rather than the site.
+  twitter: { card: "summary_large_image" },
   robots: {
     index: true,
     follow: true,

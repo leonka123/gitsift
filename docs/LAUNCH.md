@@ -22,7 +22,8 @@ Repo settings:
 - **Description:** `Open-source radar for new and rising GitHub repositories. Momentum, not star count. MIT, self-hosted, no API keys.`
 - **Topics:** `github` `open-source` `discovery` `trending` `repositories` `developer-tools` `self-hosted` `nextjs` `sqlite` `search` `semantic-search` `ai-agents`
 - **Social preview:** upload [`docs/social-preview.png`](social-preview.png) (1280×640).
-- **Discussions:** on, with a pinned "What should GitSift track next?" thread.
+- **Discussions:** on. The seed thread "What should GitSift track next?" already exists
+  (`/discussions/1`); pin it and answer in public.
 - **Issues:** labels `good first issue`, `help wanted`, `scoring`, `search`, `ui`.
 - **Website:** the deployment URL once it exists.
 
