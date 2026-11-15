@@ -9,13 +9,13 @@ kill_timeout = "5s"
   dockerfile = "Dockerfile"
 
   [build.args]
-    NEXT_PUBLIC_SITE_URL = "https://gitsift.dev"
+    NEXT_PUBLIC_SITE_URL = "http://localhost:3000"
 
 [env]
   NODE_ENV = "production"
   PORT = "3000"
   DATABASE_PATH = "/data/gitsift.db"
-  NEXT_PUBLIC_SITE_URL = "https://gitsift.dev"
+  NEXT_PUBLIC_SITE_URL = "http://localhost:3000"
 
 [mounts]
   source = "gitsift_data"

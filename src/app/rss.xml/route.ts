@@ -1,10 +1,9 @@
 import { getFeed, getLatestDigest } from "@/db/queries";
+import { SITE_URL as SITE } from "@/lib/site";
 import { repoHref } from "@/lib/utils";
 
 export const dynamic = "force-dynamic";
 export const runtime = "nodejs";
-
-const SITE = (process.env.NEXT_PUBLIC_SITE_URL || "https://gitsift.dev").replace(/\/$/, "");
 
 function escapeXml(value: string): string {
   return value

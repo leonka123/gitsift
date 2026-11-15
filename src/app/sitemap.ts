@@ -1,9 +1,8 @@
 import type { MetadataRoute } from "next";
 import { getAllRepoPaths, getTopicCounts, listDigests } from "@/db/queries";
+import { SITE_URL as SITE } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
-
-const SITE = (process.env.NEXT_PUBLIC_SITE_URL || "https://gitsift.dev").replace(/\/$/, "");
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();

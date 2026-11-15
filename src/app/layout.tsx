@@ -5,11 +5,10 @@ import "@fontsource-variable/jetbrains-mono";
 import "./globals.css";
 import { SiteHeader } from "@/components/site-header";
 import { SiteFooter } from "@/components/site-footer";
-
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL?.trim() || "https://gitsift.dev";
+import { REPO_URL, SITE_URL } from "@/lib/site";
 
 export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
+  metadataBase: new URL(SITE_URL),
   title: {
     default: "GitSift — the radar for new and rising GitHub repositories",
     template: "%s — GitSift",
@@ -17,7 +16,7 @@ export const metadata: Metadata = {
   description:
     "Sift signal from noise. GitSift tracks new and rising open-source repositories, ranks them by momentum and quality, and finds the right building block for what you are making.",
   applicationName: "GitSift",
-  authors: [{ name: "GitSift contributors", url: "https://github.com/gitsift/gitsift" }],
+  authors: [{ name: "GitSift contributors", url: REPO_URL }],
   creator: "GitSift",
   keywords: [
     "github",
@@ -32,7 +31,7 @@ export const metadata: Metadata = {
   openGraph: {
     type: "website",
     locale: "en_US",
-    url: siteUrl,
+    url: SITE_URL,
     siteName: "GitSift",
     title: "GitSift — the radar for new and rising GitHub repositories",
     description:
@@ -65,15 +64,23 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#f7f3ea",
-  colorScheme: "light",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f6efe2" },
+    { media: "(prefers-color-scheme: dark)", color: "#241b14" },
+  ],
+  colorScheme: "light dark",
   width: "device-width",
   initialScale: 1,
 };
 
+const themeScript = `(function(){try{var t=localStorage.getItem('gitsift-theme');if(t!=='light'&&t!=='dark'){t=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';}document.documentElement.dataset.theme=t;}catch(e){}})();`;
+
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" data-theme="light" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
       <body className="grain min-h-dvh antialiased">
         <a
           href="#main"

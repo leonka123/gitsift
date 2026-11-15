@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { ButtonLink } from "./ui";
+import { REPO_URL } from "@/lib/site";
 
 const COLUMNS = [
   {
@@ -24,9 +25,9 @@ const COLUMNS = [
   {
     title: "Project",
     links: [
-      { href: "https://github.com/gitsift/gitsift", label: "GitHub", external: true },
-      { href: "https://github.com/gitsift/gitsift/blob/main/CONTRIBUTING.md", label: "Contributing", external: true },
-      { href: "https://github.com/gitsift/gitsift/blob/main/LICENSE", label: "MIT license", external: true },
+      { href: REPO_URL, label: "GitHub", external: true },
+      { href: `${REPO_URL}/blob/main/CONTRIBUTING.md`, label: "Contributing", external: true },
+      { href: `${REPO_URL}/blob/main/LICENSE`, label: "MIT license", external: true },
     ],
   },
 ];
@@ -46,7 +47,7 @@ export function SiteFooter() {
               that is how the next person finds it.
             </p>
             <div className="mt-7 flex flex-wrap gap-3">
-              <ButtonLink href="https://github.com/gitsift/gitsift" external>
+              <ButtonLink href={REPO_URL} external>
                 Star on GitHub
               </ButtonLink>
               <ButtonLink href="/rss.xml" variant="secondary">

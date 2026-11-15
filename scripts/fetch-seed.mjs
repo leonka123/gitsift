@@ -13,7 +13,7 @@
 import fs from "node:fs/promises";
 import path from "node:path";
 
-const UA = "GitSift-seed/1.0 (+https://github.com/gitsift)";
+const UA = "GitSift-seed/1.0 (+https://github.com/leonka123)";
 const OUT_FILE = path.join(process.cwd(), "data", "seed", "repos.json");
 const sleep = (ms) => new Promise((r) => setTimeout(r, ms));
 

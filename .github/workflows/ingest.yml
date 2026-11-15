@@ -30,7 +30,7 @@ jobs:
           CRON_SECRET: ${{ secrets.CRON_SECRET }}
         run: |
           if [ -z "$GITSIFT_URL" ]; then
-            echo "::error::Repository variable GITSIFT_URL is not set (for example https://gitsift.dev)."
+            echo "::error::Repository variable GITSIFT_URL is not set (for example http://localhost:3000)."
             exit 1
           fi
           if [ -z "$CRON_SECRET" ]; then

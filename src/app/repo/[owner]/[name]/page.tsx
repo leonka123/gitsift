@@ -10,6 +10,7 @@ import { prettyTopic } from "@/lib/topics";
 import { ButtonLink, Eyebrow } from "@/components/ui";
 import { SignalMeter } from "@/components/signal-meter";
 import { Sparkline, modeledSeries } from "@/components/sparkline";
+import { ISSUES_URL } from "@/lib/site";
 
 export const dynamic = "force-dynamic";
 
@@ -446,7 +447,7 @@ export default async function RepoPage({ params }: Params) {
                   the filter, open an issue — the scoring rules live in the repository.
                 </p>
                 <a
-                  href="https://github.com/gitsift/gitsift/issues"
+                  href={ISSUES_URL}
                   target="_blank"
                   rel="noreferrer"
                   className="mt-3 inline-flex items-center gap-1 font-mono text-[10px] uppercase tracking-[0.08em] text-ink-2 hover:text-ink"

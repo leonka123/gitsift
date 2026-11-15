@@ -1,7 +1,8 @@
 import type { RepoUpsert } from "../db/queries";
+import { SITE_URL } from "./site";
 
 const API = "https://api.github.com";
-const UA = "GitSift/0.1 (+https://gitsift.dev)";
+const UA = `GitSift/0.1 (+${SITE_URL})`;
 
 export type GitHubSearchItem = {
   id: number;

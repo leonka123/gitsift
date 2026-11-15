@@ -2,6 +2,7 @@ import type { Repo } from "../types";
 import { daysSince } from "./scoring";
 import { formatCompact } from "./utils";
 import { canonicalTopic, prettyTopic } from "./topics";
+import { SITE_URL } from "./site";
 
 export type LlmConfig = {
   enabled: boolean;
@@ -53,7 +54,7 @@ async function chat(system: string, user: string, options: ChatOptions = {}): Pr
         headers: {
           "Content-Type": "application/json",
           Authorization: `Bearer ${config.apiKey}`,
-          "HTTP-Referer": process.env.NEXT_PUBLIC_SITE_URL || "https://gitsift.dev",
+          "HTTP-Referer": SITE_URL,
           "X-Title": "GitSift",
         },
         body: JSON.stringify(body),

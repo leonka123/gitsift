@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { HeaderSearch } from "./header-search";
+import { ThemeToggle } from "./theme-toggle";
+import { REPO_URL } from "@/lib/site";
 
 const NAV = [
   { href: "/trending", label: "Rising" },
@@ -47,8 +49,9 @@ export function SiteHeader() {
 
         <div className="flex items-center gap-2.5">
           <HeaderSearch />
+          <ThemeToggle />
           <a
-            href="https://github.com/gitsift/gitsift"
+            href={REPO_URL}
             target="_blank"
             rel="noreferrer"
             className="hidden h-9 items-center gap-1.5 rounded-xs border border-line-strong px-3 text-xs font-medium text-ink transition-colors hover:border-ink hover:bg-ink hover:text-paper sm:flex"
