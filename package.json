@@ -5,15 +5,19 @@
   "license": "MIT",
   "type": "module",
   "description": "An open-source radar for new and rising GitHub repositories.",
-  "homepage": "https://gitsift.dev",
+  "homepage": "https://github.com/leonka123/gitsift#readme",
+  "bugs": {
+    "url": "https://github.com/leonka123/gitsift/issues"
+  },
   "repository": {
     "type": "git",
-    "url": "https://github.com/gitsift/gitsift"
+    "url": "git+https://github.com/leonka123/gitsift.git"
   },
   "engines": {
     "node": ">=22"
   },
   "scripts": {
+    "predev": "tsx scripts/ensure-db.ts",
     "dev": "next dev",
     "build": "next build",
     "start": "node .next/standalone/server.js",

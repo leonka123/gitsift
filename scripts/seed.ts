@@ -19,11 +19,12 @@ import {
 } from "../src/lib/pipeline";
 import type { SeedRepo } from "../src/types";
 
-const useLlm = process.argv.includes("--llm");
-const reset = process.argv.includes("--reset") || process.env.SEED_RESET === "1";
-if (!useLlm) process.env.LLM_ENABLED = "false";
+export async function runSeed({
+  reset = false,
+  llm = false,
+}: { reset?: boolean; llm?: boolean } = {}): Promise<void> {
+  if (!llm) process.env.LLM_ENABLED = "false";
 
-async function main() {
   const file = path.join(process.cwd(), "data", "seed", "repos.json");
   if (!fs.existsSync(file)) {
     throw new Error(`Seed file not found: ${file}. Run "npm run fetch:seed" first.`);
@@ -101,7 +102,14 @@ async function main() {
   console.log(`Database: ${counts.repos} repos, ${counts.snapshots} snapshots, ${counts.digests} digests`);
 }
 
-main().catch((error) => {
-  console.error(error);
-  process.exit(1);
-});
+const invokedDirectly = process.argv[1]?.replace(/\\/g, "/").endsWith("scripts/seed.ts");
+
+if (invokedDirectly) {
+  runSeed({
+    reset: process.argv.includes("--reset") || process.env.SEED_RESET === "1",
+    llm: process.argv.includes("--llm"),
+  }).catch((error) => {
+    console.error(error);
+    process.exit(1);
+  });
+}
