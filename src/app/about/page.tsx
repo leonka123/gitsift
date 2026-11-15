@@ -3,6 +3,7 @@ import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
 import { Eyebrow } from "@/components/ui";
 import { SignalLegend } from "@/components/signal-meter";
+import { REPO_URL, SITE_URL } from "@/lib/site";
 
 export const metadata: Metadata = {
   title: "Method",
@@ -62,7 +63,7 @@ export default function AboutPage() {
 
       <div className="page py-12">
         <div className="grid gap-10 border-b border-line pb-10 lg:grid-cols-12">
-          <div className="lg:col-span-4">
+          <div className="min-w-0 lg:col-span-4">
             <p className="eyebrow">The signal scale</p>
             <p className="mt-3 text-sm leading-relaxed text-ink-2">
               Every rank is a percentile inside the current index, then bucketed into five readable
@@ -73,8 +74,8 @@ export default function AboutPage() {
               <SignalLegend />
             </div>
           </div>
-          <div className="lg:col-span-8">
-            <pre className="overflow-x-auto border border-line bg-ink p-5 font-mono text-[11px] leading-relaxed text-paper/90">
+          <div className="min-w-0 lg:col-span-8">
+            <pre className="overflow-x-auto border border-line bg-panel p-5 font-mono text-[11px] leading-relaxed text-panel-ink/90">
 {`raw = 0.50 · momentum       // log1p(stars_per_day · 7)
     + 0.16 · scale          // log10(stars + 1)
     + 0.14 · freshness      // 1 − age_days / 1100
@@ -95,20 +96,20 @@ trust  = 1 − bot_score`}
         <div className="mt-2">
           {RULES.map((rule) => (
             <section key={rule.number} className="grid gap-4 border-b border-line py-8 lg:grid-cols-12 lg:gap-10">
-              <div className="flex items-baseline gap-3 lg:col-span-4">
+              <div className="flex min-w-0 items-baseline gap-3 lg:col-span-4">
                 <span className="tnum font-mono text-[10px] text-signal-ink">{rule.number}</span>
                 <h2 className="font-serif text-2xl leading-snug md:text-3xl">{rule.title}</h2>
               </div>
-              <p className="max-w-2xl text-sm leading-relaxed text-ink-2 lg:col-span-8">{rule.body}</p>
+              <p className="min-w-0 max-w-2xl text-sm leading-relaxed text-ink-2 lg:col-span-8">{rule.body}</p>
             </section>
           ))}
         </div>
 
         <section className="mt-2 grid gap-4 border-b border-line py-8 lg:grid-cols-12 lg:gap-10">
-          <div className="lg:col-span-4">
+          <div className="min-w-0 lg:col-span-4">
             <h2 className="font-serif text-2xl leading-snug md:text-3xl">What gets filtered</h2>
           </div>
-          <div className="max-w-2xl text-sm leading-relaxed text-ink-2 lg:col-span-8">
+          <div className="min-w-0 max-w-2xl text-sm leading-relaxed text-ink-2 lg:col-span-8">
             <p>
               Ingestion is intentionally lossy. A repository is dropped before it is ever scored if it
               is a fork, archived, has no description, or carries a name and description pattern
@@ -129,10 +130,10 @@ trust  = 1 − bot_score`}
         </section>
 
         <section className="mt-2 grid gap-4 border-b border-line py-8 lg:grid-cols-12 lg:gap-10">
-          <div className="lg:col-span-4">
+          <div className="min-w-0 lg:col-span-4">
             <h2 className="font-serif text-2xl leading-snug md:text-3xl">Where data comes from</h2>
           </div>
-          <div className="max-w-2xl text-sm leading-relaxed text-ink-2 lg:col-span-8">
+          <div className="min-w-0 max-w-2xl text-sm leading-relaxed text-ink-2 lg:col-span-8">
             <p>
               Public GitHub search and repository metadata, via the REST API. Each ingest runs sixteen
               targeted queries: very new repositories, fast movers, recently pushed projects, and topic
@@ -154,10 +155,10 @@ trust  = 1 − bot_score`}
         </section>
 
         <section className="mt-2 grid gap-4 border-b border-line py-8 lg:grid-cols-12 lg:gap-10">
-          <div className="lg:col-span-4">
+          <div className="min-w-0 lg:col-span-4">
             <h2 className="font-serif text-2xl leading-snug md:text-3xl">How search works</h2>
           </div>
-          <div className="max-w-2xl text-sm leading-relaxed text-ink-2 lg:col-span-8">
+          <div className="min-w-0 max-w-2xl text-sm leading-relaxed text-ink-2 lg:col-span-8">
             <p>
               Search is hybrid. SQLite FTS5 supplies BM25 keyword ranking; a 384-dimensional vector
               index supplies a semantic-ish signal; reciprocal rank fusion merges the two lists. Query
@@ -181,16 +182,16 @@ trust  = 1 − bot_score`}
         </section>
 
         <section className="mt-2 grid gap-4 border-b border-line py-8 lg:grid-cols-12 lg:gap-10">
-          <div className="lg:col-span-4">
+          <div className="min-w-0 lg:col-span-4">
             <h2 className="font-serif text-2xl leading-snug md:text-3xl">Run it yourself</h2>
           </div>
-          <div className="max-w-2xl lg:col-span-8">
+          <div className="min-w-0 max-w-2xl lg:col-span-8">
             <p className="text-sm leading-relaxed text-ink-2">
               GitSift is a Next.js app with a local SQLite database. No external services are required
               for the demo. Clone, seed, run:
             </p>
-            <pre className="mt-4 overflow-x-auto border border-line bg-ink p-5 font-mono text-[11px] leading-relaxed text-paper/90">
-{`git clone https://github.com/gitsift/gitsift.git
+            <pre className="mt-4 overflow-x-auto border border-line bg-panel p-5 font-mono text-[11px] leading-relaxed text-panel-ink/90">
+{`git clone ${REPO_URL}.git
 cd gitsift
 npm install
 cp .env.example .env
@@ -216,22 +217,22 @@ npm run pipeline      # all of the above, in order`}
         </section>
 
         <section className="mt-2 grid gap-4 border-b border-line py-8 lg:grid-cols-12 lg:gap-10">
-          <div className="lg:col-span-4">
+          <div className="min-w-0 lg:col-span-4">
             <h2 className="font-serif text-2xl leading-snug md:text-3xl">Public API</h2>
           </div>
-          <div className="max-w-2xl lg:col-span-8">
+          <div className="min-w-0 max-w-2xl lg:col-span-8">
             <p className="text-sm leading-relaxed text-ink-2">
               The same data the pages use, without authentication. Please cache and be reasonable.
             </p>
             <pre className="mt-4 overflow-x-auto border border-line bg-paper-2/60 p-5 font-mono text-[11px] leading-relaxed text-ink-2">
 {`# The ledger, 10 at a time
-curl "https://gitsift.dev/api/repos?mode=rising&limit=10"
+curl "${SITE_URL}/api/repos?mode=rising&limit=10"
 
 # New this week, Python only
-curl "https://gitsift.dev/api/repos?mode=new&windowDays=7&language=Python"
+curl "${SITE_URL}/api/repos?mode=new&windowDays=7&language=Python"
 
 # Natural-language search
-curl "https://gitsift.dev/api/search?q=self-hosted%20analytics"`}
+curl "${SITE_URL}/api/search?q=self-hosted%20analytics"`}
             </pre>
             <p className="mt-3 text-sm leading-relaxed text-ink-2">
               Repositories are returned with their scores, dates, topics, summaries and GitHub URL. The
@@ -241,10 +242,10 @@ curl "https://gitsift.dev/api/search?q=self-hosted%20analytics"`}
         </section>
 
         <section className="mt-2 grid gap-4 border-b border-line py-8 lg:grid-cols-12 lg:gap-10">
-          <div className="lg:col-span-4">
+          <div className="min-w-0 lg:col-span-4">
             <h2 className="font-serif text-2xl leading-snug md:text-3xl">Limitations</h2>
           </div>
-          <div className="max-w-2xl text-sm leading-relaxed text-ink-2 lg:col-span-8">
+          <div className="min-w-0 max-w-2xl text-sm leading-relaxed text-ink-2 lg:col-span-8">
             <ul className="space-y-3">
               <li className="flex gap-3 border-b border-line pb-3">
                 <span className="font-mono text-[10px] text-signal-ink">01</span>
@@ -288,7 +289,7 @@ curl "https://gitsift.dev/api/search?q=self-hosted%20analytics"`}
             </p>
           </div>
           <a
-            href="https://github.com/gitsift/gitsift"
+            href={REPO_URL}
             target="_blank"
             rel="noreferrer"
             className="inline-flex h-11 items-center justify-center gap-2 bg-ink px-5 text-sm font-medium text-paper transition-colors hover:bg-signal"

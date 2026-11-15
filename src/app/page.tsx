@@ -60,7 +60,7 @@ export default function HomePage() {
         <div className="pointer-events-none absolute inset-0 grid-paper opacity-60" aria-hidden />
         <div className="page relative py-14 md:py-20">
           <div className="grid gap-12 lg:grid-cols-12 lg:gap-8">
-            <div className="lg:col-span-8">
+            <div className="min-w-0 lg:col-span-8">
               <div className="reveal flex flex-wrap items-center gap-3">
                 <span className="inline-flex size-1.5 rounded-full bg-signal live-dot" aria-hidden />
                 <Eyebrow>{week} · continuously updated</Eyebrow>
@@ -169,9 +169,9 @@ export default function HomePage() {
             </aside>
           </div>
         </div>
-
-        <Ticker repos={ticker} />
       </section>
+
+      <Ticker repos={ticker} />
 
       <section className="border-b border-line">
         <div className="page grid grid-cols-2 gap-8 py-8 md:grid-cols-4">
@@ -195,7 +195,7 @@ export default function HomePage() {
           />
 
           <div className="mt-10 grid gap-12 lg:grid-cols-12 lg:gap-10">
-            <div className="lg:col-span-7">
+            <div className="min-w-0 lg:col-span-7">
               <p className="eyebrow text-signal-ink">{digest.week}</p>
               <h3 className="display mt-3 text-4xl leading-[1.02] md:text-5xl">{digest.title}</h3>
               {digest.intro ? (
@@ -230,7 +230,7 @@ export default function HomePage() {
               </div>
             </div>
 
-            <div className="lg:col-span-5">
+            <div className="min-w-0 lg:col-span-5">
               <div className="border-t border-line">
                 {digest.items.slice(3, 6).map((item) => (
                   <RepoCard key={item.repo.id} item={item} />
@@ -263,7 +263,7 @@ export default function HomePage() {
 
       <section className="page border-t border-line py-16 md:py-20">
         <div className="grid gap-12 lg:grid-cols-12 lg:gap-10">
-          <div className="lg:col-span-7">
+          <div className="min-w-0 lg:col-span-7">
             <SectionHeading
               eyebrow="New arrivals"
               title="Just landed"
@@ -294,7 +294,7 @@ export default function HomePage() {
             </div>
           </div>
 
-          <div className="lg:col-span-5">
+          <div className="min-w-0 lg:col-span-5">
             <div className="border border-line bg-paper-2/50 p-6 md:p-7">
               <div className="flex items-start justify-between gap-4 border-b border-line pb-4">
                 <div>
@@ -363,17 +363,17 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="bg-ink text-paper">
+      <section className="bg-panel text-panel-ink">
         <div className="page py-16 md:py-24">
           <div className="grid gap-12 lg:grid-cols-12 lg:gap-10">
-            <div className="lg:col-span-5">
-              <p className="eyebrow text-paper/50">The method</p>
-              <h2 className="display mt-4 text-4xl leading-[1.02] text-paper md:text-5xl">
+            <div className="min-w-0 lg:col-span-5">
+              <p className="eyebrow text-panel-ink/50">The method</p>
+              <h2 className="display mt-4 text-4xl leading-[1.02] text-panel-ink md:text-5xl">
                 Not a star
                 <br />
                 leaderboard.
               </h2>
-              <p className="mt-5 max-w-sm text-sm leading-relaxed text-paper/65">
+              <p className="mt-5 max-w-sm text-sm leading-relaxed text-panel-ink/65">
                 Total stars reward the past. GitSift ranks the present: how fast a project is moving
                 relative to its age, whether the code is real, and whether anyone can use it.
               </p>
@@ -382,7 +382,7 @@ export default function HomePage() {
               </div>
               <Link
                 href="/about"
-                className="mt-8 inline-flex items-center gap-2 border-b border-paper/30 pb-1 font-mono text-[10px] uppercase tracking-[0.1em] text-paper/80 hover:border-paper hover:text-paper"
+                className="mt-8 inline-flex items-center gap-2 border-b border-panel-ink/30 pb-1 font-mono text-[10px] uppercase tracking-[0.1em] text-panel-ink/80 hover:border-panel-ink hover:text-panel-ink"
               >
                 Read the full method <ArrowUpRight className="size-3" aria-hidden />
               </Link>
@@ -390,10 +390,10 @@ export default function HomePage() {
 
             <div className="grid gap-x-10 gap-y-8 sm:grid-cols-2 lg:col-span-7">
               {METHOD.map((item) => (
-                <div key={item.step} className="border-t border-paper/20 pt-4">
+                <div key={item.step} className="border-t border-panel-ink/20 pt-4">
                   <p className="font-mono text-[10px] tracking-[0.1em] text-signal">{item.step}</p>
-                  <h3 className="mt-2 font-serif text-2xl text-paper">{item.title}</h3>
-                  <p className="mt-2 text-[13px] leading-relaxed text-paper/60">{item.body}</p>
+                  <h3 className="mt-2 font-serif text-2xl text-panel-ink">{item.title}</h3>
+                  <p className="mt-2 text-[13px] leading-relaxed text-panel-ink/60">{item.body}</p>
                 </div>
               ))}
             </div>

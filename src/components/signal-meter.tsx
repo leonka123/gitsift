@@ -35,7 +35,7 @@ export function SignalMeter({
               filled
                 ? "bg-signal"
                 : tone === "dark"
-                  ? "bg-paper/25"
+                  ? "bg-panel-ink/25"
                   : "bg-line-strong/60",
             )}
           />
@@ -50,7 +50,7 @@ export function SignalLegend({ tone = "light" }: { tone?: "light" | "dark" }) {
     <div
       className={cn(
         "flex flex-wrap items-center gap-x-5 gap-y-2 font-mono text-[10px] uppercase tracking-[0.08em]",
-        tone === "dark" ? "text-paper/55" : "text-muted",
+        tone === "dark" ? "text-panel-ink/55" : "text-muted",
       )}
     >
       {[

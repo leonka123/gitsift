@@ -122,7 +122,7 @@ export function StatBlock({
       <div
         className={cn(
           "font-serif text-4xl tracking-tight md:text-5xl",
-          dark ? "text-paper" : "text-ink",
+          dark ? "text-panel-ink" : "text-ink",
         )}
       >
         {value}
@@ -130,13 +130,13 @@ export function StatBlock({
       <div
         className={cn(
           "mt-2 font-mono text-[10px] uppercase tracking-[0.12em]",
-          dark ? "text-paper/55" : "text-muted",
+          dark ? "text-panel-ink/55" : "text-muted",
         )}
       >
         {label}
       </div>
       {hint ? (
-        <p className={cn("mt-2 text-xs leading-relaxed", dark ? "text-paper/55" : "text-muted")}>
+        <p className={cn("mt-2 text-xs leading-relaxed", dark ? "text-panel-ink/55" : "text-muted")}>
           {hint}
         </p>
       ) : null}

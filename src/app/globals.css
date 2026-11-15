@@ -5,24 +5,47 @@
   --font-serif: "Fraunces Variable", ui-serif, Georgia, "Times New Roman", serif;
   --font-mono: "JetBrains Mono Variable", ui-monospace, SFMono-Regular, Menlo, monospace;
 
-  --color-paper: oklch(0.968 0.01 85);
-  --color-paper-2: oklch(0.945 0.012 85);
-  --color-paper-3: oklch(0.915 0.014 84);
-  --color-cream: oklch(0.985 0.012 90);
-  --color-ink: oklch(0.175 0.01 65);
-  --color-ink-2: oklch(0.34 0.01 65);
-  --color-muted: oklch(0.5 0.01 70);
-  --color-line: oklch(0.86 0.01 80);
-  --color-line-strong: oklch(0.74 0.012 78);
+  /* Chocolate day — warm parchment, espresso ink, one vermilion signal. */
+  --color-paper: oklch(0.958 0.018 78);
+  --color-paper-2: oklch(0.93 0.023 76);
+  --color-paper-3: oklch(0.888 0.029 74);
+  --color-cream: oklch(0.976 0.016 82);
+  --color-ink: oklch(0.235 0.036 52);
+  --color-ink-2: oklch(0.4 0.032 55);
+  --color-muted: oklch(0.54 0.028 60);
+  --color-line: oklch(0.85 0.023 72);
+  --color-line-strong: oklch(0.71 0.033 66);
   --color-signal: oklch(0.585 0.205 33);
-  --color-signal-ink: oklch(0.48 0.19 33);
-  --color-signal-soft: oklch(0.94 0.035 40);
+  --color-signal-ink: oklch(0.485 0.195 33);
+  --color-signal-soft: oklch(0.94 0.04 42);
   --color-moss: oklch(0.48 0.09 150);
   --color-moss-soft: oklch(0.94 0.03 150);
+  --color-panel: oklch(0.235 0.036 50);
+  --color-panel-ink: oklch(0.956 0.014 80);
 
   --container-page: 76rem;
   --radius-xs: 2px;
   --radius-sm: 3px;
+}
+
+/* Chocolate night — deep cocoa, cream type, a brighter ember signal. */
+[data-theme="dark"] {
+  --color-paper: oklch(0.208 0.028 55);
+  --color-paper-2: oklch(0.248 0.031 55);
+  --color-paper-3: oklch(0.292 0.033 55);
+  --color-cream: oklch(0.19 0.024 55);
+  --color-ink: oklch(0.93 0.018 80);
+  --color-ink-2: oklch(0.79 0.021 75);
+  --color-muted: oklch(0.64 0.025 68);
+  --color-line: oklch(0.33 0.028 55);
+  --color-line-strong: oklch(0.45 0.033 55);
+  --color-signal: oklch(0.68 0.17 40);
+  --color-signal-ink: oklch(0.76 0.15 42);
+  --color-signal-soft: oklch(0.31 0.05 45);
+  --color-moss: oklch(0.64 0.09 150);
+  --color-moss-soft: oklch(0.29 0.04 150);
+  --color-panel: oklch(0.158 0.022 55);
+  --color-panel-ink: oklch(0.93 0.018 80);
 }
 
 @layer base {
@@ -34,6 +57,16 @@
     color-scheme: light;
     scroll-behavior: smooth;
     -webkit-text-size-adjust: 100%;
+    scrollbar-width: none;
+  }
+
+  html[data-theme="dark"] {
+    color-scheme: dark;
+  }
+
+  html::-webkit-scrollbar {
+    width: 0;
+    height: 0;
   }
 
   body {
@@ -272,8 +305,13 @@
   background-color: color-mix(in oklch, var(--color-ink) 3%, transparent);
 }
 
-.ticker {
-  mask-image: linear-gradient(to right, transparent, black 4%, black 96%, transparent);
+.ticker-viewport {
+  mask-image: linear-gradient(to right, transparent, black 6%, black 100%);
+  -webkit-mask-image: linear-gradient(to right, transparent, black 6%, black 100%);
+}
+
+.ticker-track {
+  width: max-content;
 }
 
 .no-scrollbar {

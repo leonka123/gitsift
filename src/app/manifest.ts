@@ -7,8 +7,8 @@ export default function manifest(): MetadataRoute.Manifest {
     description: "New and rising GitHub repositories, ranked by signal.",
     start_url: "/",
     display: "standalone",
-    background_color: "#f7f3ea",
-    theme_color: "#f7f3ea",
+    background_color: "#f6efe2",
+    theme_color: "#f6efe2",
     lang: "en",
     categories: ["developer", "productivity", "news"],
     icons: [
