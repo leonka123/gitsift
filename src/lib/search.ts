@@ -80,6 +80,29 @@ async function vectorCandidates(parsed: ParsedQuery, limit = 120): Promise<Ranke
   return scored.map((item, i) => ({ id: item.id, rank: i + 1 }));
 }
 
+function vocabularyHits(parsed: ParsedQuery): number {
+  // A query made only of words the index has never seen should return nothing,
+  // not the nearest vectors. Hash embeddings give gibberish a deceptively high
+  // cosine score, so the lexical vocabulary is the honest gate here.
+  const tokens = [...new Set(parsed.tokens)]
+    .map((t) => t.replace(/["*()]/g, "").trim())
+    .filter((t) => t.length > 1)
+    .slice(0, 12);
+  if (!tokens.length) return 0;
+
+  const stmt = getDb().prepare("select count(*) as n from repos_fts where repos_fts match ?");
+  let hits = 0;
+  for (const token of tokens) {
+    try {
+      const row = stmt.get(`"${token}"*`) as { n: number } | undefined;
+      if ((row?.n ?? 0) > 0) hits += 1;
+    } catch {
+      // FTS treats some punctuation as syntax; a bad token simply contributes nothing.
+    }
+  }
+  return hits;
+}
+
 function matchedTerms(repo: Repo, parsed: ParsedQuery): string[] {
   const haystack = `${repo.fullName} ${repo.description ?? ""} ${repo.topics.join(" ")}`.toLowerCase();
   const hits = new Set<string>();
@@ -122,8 +145,19 @@ export async function search(
 
   const parsed = parseQuery(trimmed);
   const fts = ftsCandidates(parsed);
-  const [vec] = await Promise.all([vectorCandidates(parsed)]);
   const lexical = fts.length ? fts : likeCandidates(parsed);
+
+  if (!lexical.length && vocabularyHits(parsed) === 0) {
+    return {
+      query: trimmed,
+      results: [],
+      tookMs: Date.now() - started,
+      mode: "lexical",
+      note: "No repository uses those words. Describe the job in plain language — English or Russian both work.",
+    };
+  }
+
+  const [vec] = await Promise.all([vectorCandidates(parsed)]);
 
   const fused = new Map<number, number>();
   const add = (items: Ranked[], weight: number) => {

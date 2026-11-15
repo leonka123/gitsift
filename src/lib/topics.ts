@@ -286,7 +286,8 @@ export function parseQuery(raw: string): ParsedQuery {
   }
 
   const lower = raw.toLowerCase();
-  const selfHosted = /self[- ]?host|on[- ]?prem|docker|локальн|сво[йя] сервер/.test(lower);  const licenseMatch = /\b(mit|apache[- ]?2|gpl[- ]?3|agpl|bsd)\b/i.exec(raw);
+  const selfHosted = /self[- ]?host|on[- ]?prem|docker|локальн|сво[йя] сервер/.test(lower);
+  const licenseMatch = /\b(mit|apache[- ]?2|gpl[- ]?3|agpl|bsd)\b/i.exec(raw);
   let license: string | null = null;
   if (licenseMatch) {
     const token = licenseMatch[1].toLowerCase().replace(/\s+/g, "-");
